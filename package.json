@@ -1,12 +1,26 @@
 {
-  "name": "my-music-app",
+  "name": "@erpproject/player",
+  "main": "build/electron.js",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && npx tsc src/electron.ts --outDir build && electron-builder",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "test-electron": "npm run build && npx tsc src/electron.ts --outDir build && electron ."
+  },
+  "build": {
+    "appId": "com.yourapp.id",
+    "files": [
+      "build/**/*",
+      "build/index.html"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": "dmg"
+    }
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -18,6 +32,7 @@
     "@types/react-dom": "^18.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.4.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
@@ -39,5 +54,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "sass": "^1.83.0"
   }
 }
