@@ -1,23 +1,24 @@
 import { app, BrowserWindow } from "electron";
+import * as path from "path";
 
 let mainWindow: BrowserWindow | null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 400,
-    height: 600,
+    width: 600,
+    height: 800,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
+      contextIsolation: true,
     },
-    center: true,
+    icon: path.join(__dirname, "favicon.ico"),
   });
 
-  mainWindow.loadURL(`file://${__dirname}/index.html`);
+  mainWindow.loadFile(path.join(__dirname, "index.html"));
+
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
-
-  mainWindow.webContents.openDevTools();
 }
 
 app.on("ready", createWindow);

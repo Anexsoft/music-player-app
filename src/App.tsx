@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { setCurrentAudioIndex, useGlobalContext } from "./Context";
 import { AudioFile } from "./Context.types";
 
-import AppHeader from "./components/AppHeader";
 import AppPlaylist from "./components/AppPlaylist";
 import AppPlayer from "./components/AppPlayer";
 import { playAudio } from "./common";
@@ -74,7 +73,6 @@ const App: React.FC = () => {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
     >
-      <AppHeader title="ERP Project Player" />
       <AppPlayer />
 
       {audioFiles.length > 0 && <AppPlaylist />}

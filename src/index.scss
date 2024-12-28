@@ -1,56 +1,45 @@
-$title-bg-color: #1e1e1e; // Fondo oscuro del título
-$title-text-color: #ffffff; // Color del texto del título
-$title-height: 40px; // Altura de la barra
-$title-padding: 10px 20px; // Espaciado interno
-$title-border-radius: 10px; // Bordes redondeados
+$title-bg-color: #1e1e1e;
+$title-text-color: #ffffff;
+$title-height: 40px;
+$padding: 15px;
 
 $primary-color: #1db954;
 $secondary-color: #282828;
-$text-color: #ffffff;
+
+$danger-color: #e63946;
+$warning-color: #f4a261;
+
+$text-color: darken(#ffffff, 20%);
 $progress-bg: #404040;
 $hover-bg: lighten($secondary-color, 5%);
 $selected-bg: $primary-color;
 $selected-text: #000000;
 
+html,
 body {
   font-family: Arial, sans-serif;
   background: $secondary-color;
   color: $text-color;
-  height: 100vh;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
+  height: 100%;
 }
 
 .App {
-  width: 400px;
-  background: #121212;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
-  overflow: hidden;
-}
-
-.title {
   display: flex;
-  align-items: center;
-  background-color: $title-bg-color;
-  color: $title-text-color;
-  height: $title-height;
-  padding: $title-padding;
-  border-top-left-radius: $title-border-radius;
-  border-top-right-radius: $title-border-radius;
-  font-size: 16px;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-  margin: -20px -20px 20px -20px;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background: $secondary-color;
+  box-sizing: border-box;
 }
 
 .drop-area {
+  flex: 1;
+  display: flex;
   border: 2px dashed $progress-bg;
+  box-sizing: border-box;
 
   &.dragging {
     border-color: $primary-color;
@@ -58,22 +47,38 @@ body {
 }
 
 .audio-player {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+
+  .track-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: $text-color;
+    background-color: $title-bg-color;
+    padding: 15px;
+    border-radius: 6px;
+    margin: -20px -20px 20px;
+  }
+
   .controls {
     display: flex;
     justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
 
     svg {
-      font-size: 80px;
-      flex: 1;
-      text-align: center;
+      font-size: 60px;
       color: $progress-bg;
       cursor: pointer;
       transition: color 0.3s;
 
-      &:hover {
-        color: $primary-color;
-      }
-
+      &:hover,
       &.active {
         color: $primary-color;
       }
@@ -81,53 +86,75 @@ body {
   }
 
   .seek-container {
-    margin: 10px 0;
+    margin-top: 20px;
+    width: 100%;
+
     input[type="range"] {
       width: 100%;
       height: 6px;
       background: $progress-bg;
       border-radius: 5px;
+      appearance: none;
+
+      &::-webkit-slider-thumb {
+        width: 15px;
+        height: 15px;
+        background: $primary-color;
+        border-radius: 50%;
+        cursor: pointer;
+        appearance: none;
+      }
     }
   }
 }
 
 .file-list {
-  margin-top: 20px;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 
   h3 {
     display: flex;
     justify-content: space-between;
+    padding: $padding;
+    background-color: $title-bg-color;
+    margin: 0;
 
     .clear-button {
       background: none;
-      border: 1px solid $primary-color;
-      color: $primary-color;
-      padding: 2px 8px;
+      border: 1px solid $warning-color;
+      color: $warning-color;
+      padding: 5px 10px;
       border-radius: 4px;
       cursor: pointer;
 
       &:hover {
-        background: $primary-color;
+        background: $warning-color;
         color: $selected-text;
       }
     }
   }
 
   ul {
-    max-height: 400px;
-    overflow-y: auto;
     list-style: none;
     padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    width: 100%;
+    box-sizing: border-box;
 
     li {
+      height: 40px;
       display: flex;
       justify-content: space-between;
-      padding: 10px;
+      align-items: center;
       background: $secondary-color;
-      border: 1px solid $progress-bg;
-      margin-bottom: 10px;
-      border-radius: 4px;
+      border-bottom: 1px solid $progress-bg;
+      font-size: 0.9em;
       cursor: pointer;
+      transition: background 0.3s;
 
       &:hover {
         background: $hover-bg;
@@ -136,6 +163,38 @@ body {
       &.selected {
         background: $selected-bg;
         color: $selected-text;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .file-container {
+        padding-left: $padding;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-grow: 1;
+
+        .file-name {
+          font-weight: bold;
+        }
+
+        .file-duration {
+          font-size: 0.8em;
+        }
+      }
+
+      .file-actions {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+
+        .button {
+          padding-right: $padding;
+          font-size: 20px;
+          cursor: pointer;
+        }
       }
     }
   }

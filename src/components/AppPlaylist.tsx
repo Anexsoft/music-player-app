@@ -4,6 +4,7 @@ import { useGlobalContext } from "../Context";
 
 import { formatDuration } from "../common/style";
 import { removeAudio } from "../common";
+import { FaDeleteLeft } from "react-icons/fa6";
 
 const AppPlaylist: React.FC = () => {
   const { audioFiles, setAudioFiles, currentAudioIndex, setCurrentAudioIndex } =
@@ -19,6 +20,17 @@ const AppPlaylist: React.FC = () => {
     setCurrentAudioIndex(-1);
   };
 
+  const handleDeleteAudio = (index: number) => {
+    setAudioFiles(audioFiles.filter((_, i) => i !== index));
+
+    if (currentAudioIndex === index) {
+      removeAudio();
+      setCurrentAudioIndex(-1);
+    } else if (currentAudioIndex > index) {
+      setCurrentAudioIndex((prevIndex) => prevIndex - 1);
+    }
+  };
+
   return (
     <div className="file-list">
       <h3>
@@ -32,13 +44,20 @@ const AppPlaylist: React.FC = () => {
         {audioFiles.map((file, index) => (
           <li
             key={index}
-            onClick={() => handlePlay(index)}
             className={index === currentAudioIndex ? "selected" : ""}
           >
-            <span className="file-name">{file.name}</span>
-            <span className="file-duration">
-              ({formatDuration(file.duration)})
-            </span>
+            <div className="file-container" onClick={() => handlePlay(index)}>
+              <span className="file-name">{file.name}</span>
+              <span className="file-duration">
+                ({formatDuration(file.duration)})
+              </span>
+            </div>
+            <div className="file-actions">
+              <FaDeleteLeft
+                className="button delete"
+                onClick={(e) => handleDeleteAudio(index)}
+              />
+            </div>
           </li>
         ))}
       </ul>

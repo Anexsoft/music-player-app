@@ -3,9 +3,13 @@ import { FaCirclePause, FaCirclePlay, FaCircleStop } from "react-icons/fa6";
 
 import { currentAudioFile } from "../Context";
 import { pauseAudio, playAudio, stopAudio } from "../common";
+import { useGlobalContext } from "../Context";
 
 const AppPlayer: React.FC = () => {
+  const { audioFiles, currentAudioIndex } = useGlobalContext();
   const [currentAudioSeek, setCurrentAudioSeek] = useState(0);
+  const [currentTime, setCurrentTime] = useState("0:00");
+  const [duration, setDuration] = useState("0:00");
 
   const handlePause = () => {
     pauseAudio();
@@ -31,6 +35,16 @@ const AppPlayer: React.FC = () => {
   useEffect(() => {
     const handleTimeUpdate = () => {
       if (currentAudioFile) {
+        const formatTime = (time: number) => {
+          const minutes = Math.floor(time / 60);
+          const seconds = Math.floor(time % 60)
+            .toString()
+            .padStart(2, "0");
+          return `${minutes}:${seconds}`;
+        };
+
+        setCurrentTime(formatTime(currentAudioFile.currentTime));
+        setDuration(formatTime(currentAudioFile.duration || 0));
         setCurrentAudioSeek(
           (currentAudioFile.currentTime / currentAudioFile.duration) * 100 || 0
         );
@@ -44,8 +58,20 @@ const AppPlayer: React.FC = () => {
     };
   }, [setCurrentAudioSeek]);
 
+  const trackTitle =
+    currentAudioIndex !== -1
+      ? audioFiles[currentAudioIndex]?.name
+      : "Player is empty";
+
   return (
     <div className="audio-player">
+      <div className="track-info">
+        <span className="track-title">{trackTitle}</span>
+        <span className="track-time">
+          {currentAudioIndex !== -1 ? `${currentTime} / ${duration}` : ""}
+        </span>
+      </div>
+
       <div className="controls">
         <FaCirclePlay onClick={handlePlay} />
         <FaCirclePause onClick={handlePause} />
