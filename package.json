@@ -1,6 +1,8 @@
 {
   "name": "@erpproject/player",
   "main": "build/electron.js",
+  "description": "ERP Project Player created with React and Electron",
+  "author": "ERP Project",
   "version": "0.1.0",
   "private": true,
   "homepage": ".",
@@ -11,29 +13,6 @@
     "eject": "react-scripts eject",
     "electron": "electron .",
     "test-electron": "react-scripts build && npx tsc src/electron.ts --outDir build && electron ."
-  },
-  "build": {
-    "appId": "com.yourapp.id",
-    "files": [
-      "build/**/*",
-      "build/index.html"
-    ],
-    "mac": {
-      "category": "public.app-category.utilities",
-      "target": "dmg"
-    },
-    "fileAssociations": [
-      {
-        "ext": [
-          "wav",
-          "mp3",
-          "ogg",
-          "flac"
-        ],
-        "name": "Audio File",
-        "description": "Audio files handled by ERP Project Player"
-      }
-    ]
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",

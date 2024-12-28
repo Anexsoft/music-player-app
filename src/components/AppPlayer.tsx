@@ -1,15 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { FaCirclePause, FaCirclePlay, FaCircleStop } from "react-icons/fa6";
+import {
+  FaCirclePause,
+  FaCirclePlay,
+  FaCircleStop,
+  FaVolumeLow,
+  FaVolumeXmark,
+  FaVolumeHigh,
+} from "react-icons/fa6";
 
-import { currentAudioFile } from "../Context";
 import { pauseAudio, playAudio, stopAudio } from "../common";
 import { useGlobalContext } from "../Context";
 
 const AppPlayer: React.FC = () => {
-  const { audioFiles, currentAudioIndex } = useGlobalContext();
+  const {
+    audioFiles,
+    currentAudioIndex,
+    setCurrentAudioIndex,
+    currentAudioFile,
+  } = useGlobalContext();
+
   const [currentAudioSeek, setCurrentAudioSeek] = useState(0);
   const [currentTime, setCurrentTime] = useState("0:00");
   const [duration, setDuration] = useState("0:00");
+
+  const [volume, setVolume] = useState(
+    currentAudioFile ? currentAudioFile.volume * 100 : 100
+  );
+  const [previousVolume, setPreviousVolume] = useState(volume);
 
   const handlePause = () => {
     pauseAudio();
@@ -32,17 +49,71 @@ const AppPlayer: React.FC = () => {
     }
   };
 
+  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value) / 100;
+    setVolume(value * 100);
+
+    if (currentAudioFile) {
+      currentAudioFile.volume = value;
+    }
+  };
+
+  const handleMuteToggle = () => {
+    if (volume > 0) {
+      setPreviousVolume(volume);
+      setVolume(0);
+      if (currentAudioFile) {
+        currentAudioFile.volume = 0;
+      }
+    } else {
+      setVolume(previousVolume);
+      if (currentAudioFile) {
+        currentAudioFile.volume = previousVolume / 100;
+      }
+    }
+  };
+
+  const getVolumeIcon = () => {
+    if (volume === 0) {
+      return (
+        <FaVolumeXmark
+          className="volume-icon"
+          onClick={handleMuteToggle}
+          title="Unmute"
+        />
+      );
+    }
+
+    if (volume > 0 && volume <= 50) {
+      return (
+        <FaVolumeLow
+          className="volume-icon"
+          onClick={handleMuteToggle}
+          title="Mute"
+        />
+      );
+    }
+
+    return (
+      <FaVolumeHigh
+        className="volume-icon"
+        onClick={handleMuteToggle}
+        title="Mute"
+      />
+    );
+  };
+
   useEffect(() => {
+    const formatTime = (time: number) => {
+      const minutes = Math.floor(time / 60);
+      const seconds = Math.floor(time % 60)
+        .toString()
+        .padStart(2, "0");
+      return `${minutes}:${seconds}`;
+    };
+
     const handleTimeUpdate = () => {
       if (currentAudioFile) {
-        const formatTime = (time: number) => {
-          const minutes = Math.floor(time / 60);
-          const seconds = Math.floor(time % 60)
-            .toString()
-            .padStart(2, "0");
-          return `${minutes}:${seconds}`;
-        };
-
         setCurrentTime(formatTime(currentAudioFile.currentTime));
         setDuration(formatTime(currentAudioFile.duration || 0));
         setCurrentAudioSeek(
@@ -51,17 +122,27 @@ const AppPlayer: React.FC = () => {
       }
     };
 
+    const handleAudioEnded = () => {
+      if (currentAudioIndex < audioFiles.length - 1) {
+        setCurrentAudioIndex(currentAudioIndex + 1);
+      } else {
+        setCurrentAudioIndex(-1);
+      }
+    };
+
     currentAudioFile?.addEventListener("timeupdate", handleTimeUpdate);
+    currentAudioFile?.addEventListener("ended", handleAudioEnded);
 
     return () => {
       currentAudioFile?.removeEventListener("timeupdate", handleTimeUpdate);
+      currentAudioFile?.removeEventListener("ended", handleAudioEnded);
     };
-  }, [setCurrentAudioSeek]);
+  }, [currentAudioIndex, audioFiles, setCurrentAudioIndex, currentAudioFile]);
 
   const trackTitle =
     currentAudioIndex !== -1
       ? audioFiles[currentAudioIndex]?.name
-      : "Player is empty";
+      : "No audio selected";
 
   return (
     <div className="audio-player">
@@ -78,7 +159,7 @@ const AppPlayer: React.FC = () => {
         <FaCircleStop onClick={handleStop} />
       </div>
 
-      <div className="seek-container">
+      <div className="seek-volume-container">
         <input
           type="range"
           value={currentAudioSeek}
@@ -87,7 +168,21 @@ const AppPlayer: React.FC = () => {
           step="1"
           onChange={handleSeekChange}
           aria-label="Seek bar"
+          className="seek-bar"
         />
+        <div className="volume-control">
+          {getVolumeIcon()}
+          <input
+            type="range"
+            value={volume}
+            min="0"
+            max="100"
+            step="1"
+            onChange={handleVolumeChange}
+            aria-label="Volume control"
+            className="volume-bar"
+          />
+        </div>
       </div>
     </div>
   );

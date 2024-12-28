@@ -1,0 +1,45 @@
+{
+    "appId": "com.yourapp.id",
+    "productName": "ERP Project Player",
+    "files": [
+        "build/**/*",
+        "favicon.icns",
+        "index.html"
+    ],
+    "mac": {
+        "category": "public.app-category.utilities",
+        "identity": "",
+        "icon": "favicon.icns",
+        "target": [
+            "dmg",
+            "zip"
+        ]
+    },
+    "win": {
+        "icon": "favicon.ico",
+        "target": [
+            "nsis",
+            "zip"
+        ]
+    },
+    "linux": {
+        "category": "Audio",
+        "icon": "favicon.png",
+        "target": [
+            "AppImage",
+            "deb"
+        ]
+    },
+    "fileAssociations": [
+        {
+            "ext": [
+                "wav",
+                "mp3",
+                "ogg",
+                "flac"
+            ],
+            "name": "Audio File",
+            "description": "Audio files handled by ERP Project Player"
+        }
+    ]
+}

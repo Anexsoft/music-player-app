@@ -60,20 +60,32 @@ body {
     font-size: 14px;
     font-weight: bold;
     color: $text-color;
-    background-color: $title-bg-color;
-    padding: 15px;
-    border-radius: 6px;
-    margin: -20px -20px 20px;
+    background-color: darken($secondary-color, 10%);
+    padding: $padding;
+    margin: -20px;
+    margin-bottom: 20px;
+
+    .track-title {
+      max-width: 80%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      animation: marquee 10s linear infinite;
+    }
+
+    .track-time {
+      font-size: 14px;
+      color: lighten($text-color, 20%);
+    }
   }
 
   .controls {
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    margin-top: 20px;
+    margin-bottom: $padding;
 
     svg {
-      font-size: 60px;
+      font-size: 80px;
       color: $progress-bg;
       cursor: pointer;
       transition: color 0.3s;
@@ -85,16 +97,24 @@ body {
     }
   }
 
-  .seek-container {
-    margin-top: 20px;
+  .seek-volume-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
+    gap: 10px;
 
-    input[type="range"] {
-      width: 100%;
+    .seek-bar {
+      flex: 1;
       height: 6px;
       background: $progress-bg;
       border-radius: 5px;
       appearance: none;
+      transition: background 0.3s ease-in-out, width 0.3s ease-in-out;
+
+      &:hover {
+        background: lighten($progress-bg, 10%);
+      }
 
       &::-webkit-slider-thumb {
         width: 15px;
@@ -103,6 +123,49 @@ body {
         border-radius: 50%;
         cursor: pointer;
         appearance: none;
+        transition: transform 0.2s ease-in-out;
+
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      .volume-icon {
+        font-size: 20px;
+        color: $text-color;
+      }
+
+      .volume-bar {
+        width: 100px;
+        height: 6px;
+        background: $progress-bg;
+        border-radius: 5px;
+        appearance: none;
+        transition: background 0.3s ease-in-out;
+
+        &:hover {
+          background: lighten($progress-bg, 10%);
+        }
+
+        &::-webkit-slider-thumb {
+          width: 15px;
+          height: 15px;
+          background: $primary-color;
+          border-radius: 50%;
+          cursor: pointer;
+          appearance: none;
+          transition: transform 0.2s ease-in-out;
+
+          &:hover {
+            transform: scale(1.2);
+          }
+        }
       }
     }
   }
@@ -163,6 +226,10 @@ body {
       &.selected {
         background: $selected-bg;
         color: $selected-text;
+
+        .file-actions .button {
+          font-size: 1.2em; /* Se asegura que mantenga el tamaño dentro de selected */
+        }
       }
 
       &:last-child {
@@ -170,18 +237,24 @@ body {
       }
 
       .file-container {
-        padding-left: $padding;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-grow: 1;
+        overflow: hidden;
 
         .file-name {
+          padding-left: $padding;
           font-weight: bold;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          max-width: 80%;
         }
 
         .file-duration {
           font-size: 0.8em;
+          margin-left: auto;
         }
       }
 
@@ -192,7 +265,7 @@ body {
 
         .button {
           padding-right: $padding;
-          font-size: 20px;
+          font-size: 1.2em;
           cursor: pointer;
         }
       }
