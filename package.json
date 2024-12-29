@@ -3,7 +3,7 @@
   "main": "build/electron.js",
   "description": "ERP Project Player created with React and Electron",
   "author": "ERP Project",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "homepage": ".",
   "scripts": {

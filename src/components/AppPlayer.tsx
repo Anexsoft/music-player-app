@@ -130,12 +130,41 @@ const AppPlayer: React.FC = () => {
       }
     };
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        event.preventDefault();
+        if (currentAudioFile?.paused) {
+          handlePlay();
+        } else {
+          handlePause();
+        }
+      } else if (event.code === "ArrowRight") {
+        event.preventDefault();
+        if (currentAudioFile) {
+          currentAudioFile.currentTime = Math.min(
+            currentAudioFile.currentTime + 3,
+            currentAudioFile.duration
+          );
+        }
+      } else if (event.code === "ArrowLeft") {
+        event.preventDefault();
+        if (currentAudioFile) {
+          currentAudioFile.currentTime = Math.max(
+            currentAudioFile.currentTime - 3,
+            0
+          );
+        }
+      }
+    };
+
     currentAudioFile?.addEventListener("timeupdate", handleTimeUpdate);
     currentAudioFile?.addEventListener("ended", handleAudioEnded);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       currentAudioFile?.removeEventListener("timeupdate", handleTimeUpdate);
       currentAudioFile?.removeEventListener("ended", handleAudioEnded);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [currentAudioIndex, audioFiles, setCurrentAudioIndex, currentAudioFile]);
 
