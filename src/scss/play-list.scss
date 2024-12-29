@@ -1,0 +1,103 @@
+@import "./theme";
+
+.play-list {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  h3 {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing);
+    background-color: var(--title-bg-color);
+    margin: 0;
+
+    .clear-button {
+      background: none;
+      border: 1px solid var(--warning-color);
+      color: var(--warning-color);
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+
+      &:hover {
+        background: var(--warning-color);
+        color: var(--selected-text);
+      }
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    width: 100%;
+    box-sizing: border-box;
+
+    li {
+      height: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--secondary-color);
+      border-bottom: 1px solid var(--progress-bg);
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background: var(--hover-bg);
+      }
+
+      &.selected {
+        background: var(--selected-bg);
+        color: var(--selected-text);
+
+        .file-actions .button {
+          font-size: 1.2em;
+        }
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .file-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-grow: 1;
+        overflow: hidden;
+
+        .file-name {
+          padding-left: var(--spacing);
+          font-weight: bold;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          max-width: 80%;
+        }
+
+        .file-duration {
+          font-size: 0.8em;
+          margin-left: auto;
+        }
+      }
+
+      .file-actions {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+
+        .button {
+          padding-right: var(--spacing);
+          font-size: 1.2em;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

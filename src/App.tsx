@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { setCurrentAudioIndex, useGlobalContext } from "./Context";
 import { AudioFile } from "./Context.types";
 
-import AppPlaylist from "./components/AppPlaylist";
-import AppPlayer from "./components/AppPlayer";
+import AppPlayList from "./components/AppPlayList/AppPlayList";
+import AppPlayer from "./components/AppPlayer/AppPlayer";
+
 import { playAudio } from "./common";
 
 const App: React.FC = () => {
@@ -75,7 +76,7 @@ const App: React.FC = () => {
     >
       <AppPlayer />
 
-      {audioFiles.length > 0 && <AppPlaylist />}
+      {audioFiles.length > 0 && <AppPlayList />}
     </div>
   );
 };

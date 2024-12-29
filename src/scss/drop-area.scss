@@ -1,0 +1,12 @@
+@import "./theme";
+
+.drop-area {
+  flex: 1;
+  display: flex;
+  border: 2px dashed transparent;
+  box-sizing: border-box;
+
+  &.dragging {
+    border-color: var(--primary-color);
+  }
+}
