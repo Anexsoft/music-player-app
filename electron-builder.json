@@ -1,35 +1,15 @@
 {
     "appId": "com.yourapp.id",
     "productName": "ERP Project Player",
+    "directories": {
+        "output": "dist",
+        "buildResources": "build"
+    },
     "files": [
         "build/**/*",
         "favicon.icns",
         "index.html"
     ],
-    "mac": {
-        "category": "public.app-category.utilities",
-        "identity": "",
-        "icon": "favicon.icns",
-        "target": [
-            "dmg",
-            "zip"
-        ]
-    },
-    "win": {
-        "icon": "favicon.ico",
-        "target": [
-            "nsis",
-            "zip"
-        ]
-    },
-    "linux": {
-        "category": "Audio",
-        "icon": "favicon.png",
-        "target": [
-            "AppImage",
-            "deb"
-        ]
-    },
     "fileAssociations": [
         {
             "ext": [
@@ -41,5 +21,39 @@
             "name": "Audio File",
             "description": "Audio files handled by ERP Project Player"
         }
-    ]
+    ],
+    "protocols": [
+        {
+            "name": "ERP Project Protocol",
+            "schemes": [
+                "erpplayer"
+            ]
+        }
+    ],
+    "mac": {
+        "icon": "build/icon.icns",
+        "category": "public.app-category.utilities",
+        "hardenedRuntime": true,
+        "entitlements": "entitlements.mac.plist"
+    },
+    "win": {
+        "target": "nsis",
+        "icon": "build/icon.ico"
+    },
+    "linux": {
+        "target": "AppImage",
+        "icon": "build",
+        "category": "AudioVideo"
+    },
+    "publish": {
+        "provider": "github",
+        "owner": "your-github-username",
+        "repo": "your-repo-name"
+    },
+    "nsis": {
+        "oneClick": false,
+        "allowToChangeInstallationDirectory": true,
+        "createDesktopShortcut": true,
+        "createStartMenuShortcut": true
+    }
 }

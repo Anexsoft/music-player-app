@@ -11,7 +11,6 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
     },
-    icon: path.join(__dirname, "favicon.icns"),
   });
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
