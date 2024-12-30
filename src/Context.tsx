@@ -24,7 +24,12 @@ export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [_currentAudioFile, _setCurrentAudioFile] =
-    useState<HTMLAudioElement | null>(new Audio());
+    useState<HTMLAudioElement | null>(() => {
+      const audio = new Audio();
+      audio.volume = 0.5;
+
+      return audio;
+    });
   const [_audioFiles, _setAudioFiles] = useState<AudioFile[]>([]);
   const [_currentAudioIndex, _setCurrentAudioIndex] = useState<number>(-1);
 

@@ -1,8 +1,9 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
+import { ipcMain, dialog } from "electron";
 
+const isDev = !app.isPackaged;
 let mainWindow: BrowserWindow | null;
-let fileToOpen: string | undefined;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -14,31 +15,34 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, "index.html"));
+  if (isDev) {
+    mainWindow.loadURL("http://localhost:3000");
+    mainWindow.webContents.openDevTools();
+  } else {
+    mainWindow.loadFile(path.join(__dirname, "index.html"));
+  }
 
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
-
-  mainWindow.webContents.once("did-finish-load", () => {
-    if (fileToOpen) {
-      mainWindow?.webContents.send("file-opened", fileToOpen);
-    }
-  });
-
-  mainWindow.webContents.openDevTools();
 }
 
 app.on("ready", () => {
-  const args = process.argv.slice(1);
-  const fileArg = args.find((arg) => !arg.startsWith("-"));
-  if (fileArg) {
-    fileToOpen = fileArg;
-  }
   createWindow();
 });
 
 app.on("window-all-closed", () => {
+  ipcMain.handle("upload-file", async () => {
+    const result = await dialog.showOpenDialog(mainWindow!, {
+      properties: ["openFile"],
+    });
+
+    if (result.canceled) {
+      return null;
+    } else {
+      return result.filePaths[0];
+    }
+  });
   if (process.platform !== "darwin") {
     app.quit();
   }

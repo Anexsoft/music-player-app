@@ -1,4 +1,3 @@
-/* Default theme (shared styles) */
 :root {
   --spacing: 15px;
   --title-bg-color: #1e1e1e;
@@ -14,7 +13,6 @@
   --selected-text: #000000;
 }
 
-/* Light theme */
 [data-theme="light"] {
   --title-bg-color: #e0e0e0;
   --title-text-color: #333333;
@@ -29,7 +27,6 @@
   --selected-text: #ffffff;
 }
 
-/* Solaris theme */
 [data-theme="solaris"] {
   --title-bg-color: #ffecd2;
   --title-text-color: #333333;
@@ -44,7 +41,6 @@
   --selected-text: #000000;
 }
 
-/* Neon theme */
 [data-theme="neon"] {
   --title-bg-color: #0f0f0f;
   --title-text-color: #39ff14;
@@ -54,7 +50,77 @@
   --warning-color: #ffd700;
   --text-color: #39ff14;
   --progress-bg: #444444;
-  --hover-bg: #232323; /* Manually adjusted for a lighter secondary color */
+  --hover-bg: #232323;
   --selected-bg: #ff007f;
   --selected-text: #ffffff;
+}
+
+[data-theme="cyberpunk"] {
+  --title-bg-color: #2e2b57;
+  --title-text-color: #f8e71c;
+  --primary-color: #ff2d55;
+  --secondary-color: #1c1a35;
+  --danger-color: #d0021b;
+  --warning-color: #f5a623;
+  --text-color: #f8e71c;
+  --progress-bg: #3d3357;
+  --hover-bg: #4a4266;
+  --selected-bg: #ff2d55;
+  --selected-text: #ffffff;
+}
+
+[data-theme="retro"] {
+  --title-bg-color: #3b5998;
+  --title-text-color: #fdfd96;
+  --primary-color: #fd5e53;
+  --secondary-color: #ffefd5;
+  --danger-color: #ff6f61;
+  --warning-color: #f7d117;
+  --text-color: #404040;
+  --progress-bg: #d3d3d3;
+  --hover-bg: #c0c0c0;
+  --selected-bg: #fd5e53;
+  --selected-text: #000000;
+}
+
+[data-theme="vscode"] {
+  --title-bg-color: #1e1e1e;
+  --title-text-color: #d4d4d4;
+  --primary-color: #007acc;
+  --secondary-color: #252526;
+  --danger-color: #f48771;
+  --warning-color: #ffcc00;
+  --text-color: #d4d4d4;
+  --progress-bg: #3c3c3c;
+  --hover-bg: #333333;
+  --selected-bg: #007acc;
+  --selected-text: #ffffff;
+}
+
+[data-theme="forest"] {
+  --title-bg-color: #2b4f2e;
+  --title-text-color: #e0ffdf;
+  --primary-color: #77ab59;
+  --secondary-color: #163817;
+  --danger-color: #b33a3a;
+  --warning-color: #c9b037;
+  --text-color: #e0ffdf;
+  --progress-bg: #244623;
+  --hover-bg: #335c35;
+  --selected-bg: #77ab59;
+  --selected-text: #ffffff;
+}
+
+[data-theme="sunset"] {
+  --title-bg-color: #ff6e40;
+  --title-text-color: #ffffff;
+  --primary-color: #ffab40;
+  --secondary-color: #ff5722;
+  --danger-color: #d50000;
+  --warning-color: #ffca28;
+  --text-color: #ffffff;
+  --progress-bg: #e64a19;
+  --hover-bg: #f4511e;
+  --selected-bg: #ffab40;
+  --selected-text: #000000;
 }

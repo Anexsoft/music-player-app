@@ -10,9 +10,16 @@ import {
 
 import { pauseAudio, playAudio, stopAudio } from "../../common";
 import { useGlobalContext } from "../../Context";
+
 import { handleTimeUpdate } from "./handlers/time-update.handler";
 import { handleAudioEnded } from "./handlers/audio-ended.handler";
 import { handleKeyDown } from "./handlers/key-down.handler";
+import { handleSeekChangeHandler } from "./handlers/seek-change.handler";
+import { handleMuteToggleHandler } from "./handlers/mute-toggle.handler";
+import { handleVolumeChangeHandler } from "./handlers/volume-change.handler";
+import { playbackRateChangeHandler } from "./handlers/playback-rate-change.handler";
+import { handleThemeChange } from "./handlers/theme-change.handler";
+import { THEME_KEY } from "../../common/keys";
 
 const AppPlayer: React.FC = () => {
   const {
@@ -37,7 +44,7 @@ const AppPlayer: React.FC = () => {
   const loadedDataRef = useRef<() => void>();
   const keyDownRef = useRef<(event: KeyboardEvent) => void>();
 
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(localStorage.getItem(THEME_KEY) ?? "dark");
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -103,56 +110,20 @@ const AppPlayer: React.FC = () => {
     playbackRate,
   ]);
 
-  const handleSeekChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
-    setCurrentAudioSeek(value);
-
-    if (currentAudioFile) {
-      currentAudioFile.currentTime = (value / 100) * currentAudioFile.duration;
-    }
-  };
-
-  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value) / 100;
-    setVolume(value * 100);
-
-    if (currentAudioFile) {
-      currentAudioFile.volume = value;
-    }
-  };
-
-  const handleMuteToggle = () => {
-    if (volume > 0) {
-      setPreviousVolume(volume);
-      setVolume(0);
-      if (currentAudioFile) {
-        currentAudioFile.volume = 0;
-      }
-    } else {
-      setVolume(previousVolume);
-      if (currentAudioFile) {
-        currentAudioFile.volume = previousVolume / 100;
-      }
-    }
-  };
-
-  const handlePlaybackRateChange = (rate: number) => {
-    setPlaybackRate(rate);
-    if (currentAudioFile) {
-      currentAudioFile.playbackRate = rate;
-    }
-  };
-
-  const handleShuffleToggle = () => {
-    setIsShuffle((prev) => !prev);
-  };
-
   const getVolumeIcon = () => {
     if (volume === 0) {
       return (
         <FaVolumeXmark
           className="volume-icon"
-          onClick={handleMuteToggle}
+          onClick={() =>
+            handleMuteToggleHandler({
+              currentAudioFile,
+              previousVolume,
+              setPreviousVolume,
+              setVolume,
+              volume,
+            })
+          }
           title="Unmute"
         />
       );
@@ -162,7 +133,15 @@ const AppPlayer: React.FC = () => {
       return (
         <FaVolumeLow
           className="volume-icon"
-          onClick={handleMuteToggle}
+          onClick={() =>
+            handleMuteToggleHandler({
+              currentAudioFile,
+              previousVolume,
+              setPreviousVolume,
+              setVolume,
+              volume,
+            })
+          }
           title="Mute"
         />
       );
@@ -171,7 +150,15 @@ const AppPlayer: React.FC = () => {
     return (
       <FaVolumeHigh
         className="volume-icon"
-        onClick={handleMuteToggle}
+        onClick={() =>
+          handleMuteToggleHandler({
+            currentAudioFile,
+            previousVolume,
+            setPreviousVolume,
+            setVolume,
+            volume,
+          })
+        }
         title="Mute"
       />
     );
@@ -205,7 +192,13 @@ const AppPlayer: React.FC = () => {
             min="0"
             max="100"
             step="1"
-            onChange={handleSeekChange}
+            onChange={(e) =>
+              handleSeekChangeHandler({
+                value: Number(e.target.value),
+                currentAudioFile,
+                setCurrentAudioSeek,
+              })
+            }
             aria-label="Seek bar"
             className="seek-bar"
           />
@@ -217,7 +210,13 @@ const AppPlayer: React.FC = () => {
               min="0"
               max="100"
               step="1"
-              onChange={handleVolumeChange}
+              onChange={(e) =>
+                handleVolumeChangeHandler({
+                  currentAudioFile,
+                  setVolume,
+                  value: Number(e.target.value),
+                })
+              }
               aria-label="Volume control"
               className="volume-bar"
             />
@@ -229,7 +228,7 @@ const AppPlayer: React.FC = () => {
             <div className="shuffle-control">
               <button
                 className={`shuffle-button ${isShuffle ? "active" : ""}`}
-                onClick={handleShuffleToggle}
+                onClick={() => setIsShuffle((prev) => !prev)}
               >
                 Shuffle
               </button>
@@ -243,7 +242,13 @@ const AppPlayer: React.FC = () => {
                     className={`playback-button ${
                       playbackRate === rate ? "active" : ""
                     }`}
-                    onClick={() => handlePlaybackRateChange(rate)}
+                    onClick={() =>
+                      playbackRateChangeHandler({
+                        rate,
+                        currentAudioFile,
+                        setPlaybackRate,
+                      })
+                    }
                   >
                     {rate}x
                   </button>
@@ -254,12 +259,19 @@ const AppPlayer: React.FC = () => {
             <div className="theme-control">
               <select
                 className="theme-selector"
-                onChange={(e) => setTheme(e.target.value)}
+                onChange={(e) =>
+                  handleThemeChange({ value: e.target.value, setTheme })
+                }
               >
                 <option value="dark">Dark</option>
                 <option value="light">Light</option>
                 <option value="solaris">Solaris</option>
                 <option value="neon">Neon</option>
+                <option value="vscode">VSCode</option>
+                <option value="forest">Forest</option>
+                <option value="sunset">Sunset</option>
+                <option value="cyberpunk">Cyberpunk</option>
+                <option value="retro">Retro</option>
               </select>
             </div>
           </div>

@@ -1,17 +1,17 @@
 {
   "name": "@erpproject/player",
-  "main": "build/electron.js",
   "description": "ERP Project Player created with React and Electron",
   "author": "ERP Project",
   "version": "0.2.0",
   "private": true,
   "homepage": ".",
+  "main": "public/electron.js",
   "scripts": {
     "start": "react-scripts start",
+    "electron": "npm run tef-electron && concurrently \"BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "npm run tef-electron && react-scripts build && electron-builder",
     "test": "react-scripts test",
-    "tef-electron": "npx tsc src/electron.ts --outDir public",
-    "electron": "npm run tef-electron && react-scripts build && electron ."
+    "tef-electron": "npx tsc src/electron.ts --outDir public"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -47,8 +47,10 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^9.1.1",
     "electron": "^33.2.1",
     "electron-builder": "^25.1.8",
-    "sass": "^1.83.0"
+    "sass": "^1.83.0",
+    "wait-on": "^8.0.1"
   }
 }
