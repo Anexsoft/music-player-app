@@ -8,11 +8,10 @@
   "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && npx tsc src/electron.ts --outDir build && electron-builder",
+    "build": "npm run tef-electron && react-scripts build && electron-builder",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "electron": "electron .",
-    "test-electron": "react-scripts build && npx tsc src/electron.ts --outDir build && electron ."
+    "tef-electron": "npx tsc src/electron.ts --outDir public",
+    "electron": "npm run tef-electron && react-scripts build && electron ."
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",

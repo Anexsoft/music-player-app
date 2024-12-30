@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export interface AudioFile {
   name: string;
-  url: string;
+  path: string;
   duration: number;
 }
 

@@ -1,5 +1,5 @@
 {
-    "appId": "com.yourapp.id",
+    "appId": "com.erpproject.player",
     "productName": "ERP Project Player",
     "directories": {
         "output": "dist",
@@ -19,36 +19,55 @@
                 "flac"
             ],
             "name": "Audio File",
-            "description": "Audio files handled by ERP Project Player"
-        }
-    ],
-    "protocols": [
-        {
-            "name": "ERP Project Protocol",
-            "schemes": [
-                "erpplayer"
-            ]
+            "description": "Audio files handled by ERP Project Player",
+            "role": "Editor",
+            "icon": "build/icon.icns"
         }
     ],
     "mac": {
         "icon": "build/icon.icns",
         "category": "public.app-category.utilities",
         "hardenedRuntime": true,
-        "entitlements": "entitlements.mac.plist"
+        "entitlements": "entitlements.mac.plist",
+        "entitlementsInherit": "entitlements.mac.plist",
+        "extendInfo": {
+            "CFBundleName": "ERP Project Player",
+            "CFBundleIdentifier": "erpproject.id",
+            "CFBundleVersion": "1.0.0",
+            "CFBundleExecutable": "ERP Project Player",
+            "CFBundleIconFile": "icon.icns",
+            "CFBundlePackageType": "APPL",
+            "NSHighResolutionCapable": true,
+            "LSApplicationCategoryType": "public.app-category.utilities",
+            "CFBundleDocumentTypes": [
+                {
+                    "CFBundleTypeExtensions": [
+                        "mp3",
+                        "wav",
+                        "flac",
+                        "ogg"
+                    ],
+                    "CFBundleTypeName": "Audio File",
+                    "CFBundleTypeRole": "Viewer",
+                    "LSHandlerRank": "Default"
+                }
+            ]
+        }
     },
     "win": {
         "target": "nsis",
         "icon": "build/icon.ico"
     },
     "linux": {
-        "target": "AppImage",
-        "icon": "build",
-        "category": "AudioVideo"
+        "target": [
+            "AppImage"
+        ],
+        "icon": "build"
     },
     "publish": {
         "provider": "github",
-        "owner": "your-github-username",
-        "repo": "your-repo-name"
+        "owner": "Anexsoft",
+        "repo": "https://github.com/Anexsoft/music-player-app"
     },
     "nsis": {
         "oneClick": false,

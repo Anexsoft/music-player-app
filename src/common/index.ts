@@ -8,7 +8,12 @@ export const playAudio = (updateAudioRef = false): void => {
   if (currentAudioIndex === -1) return;
 
   if (updateAudioRef) {
-    currentAudioFile.src = audioFile.url;
+    if (audioFile) {
+      currentAudioFile.src = audioFile.path;
+    } else {
+      console.error("Invalid audio file or path");
+      return;
+    }
   }
 
   if (currentAudioFile.paused) {

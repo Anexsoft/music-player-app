@@ -16,45 +16,65 @@ const App: React.FC = () => {
     if (currentAudioIndex > -1) {
       playAudio(true);
     }
-  }, [currentAudioIndex]);
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    window.electron?.onFileOpened((path: string) => {
+      const audio = new Audio(path);
+
+      audio.addEventListener("loadedmetadata", () => {
+        const newAudioFile: AudioFile = {
+          name: path.split("/").pop() || "Unknown",
+          path: audio.src,
+          duration: audio.duration,
+        };
+
+        setAudioFiles((prev) => {
+          const updatedFiles = [...prev, newAudioFile];
+          setCurrentAudioIndex(updatedFiles.indexOf(newAudioFile));
+          return updatedFiles;
+        });
+      });
+    });
+  }, [currentAudioIndex, setAudioFiles]);
+
+  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setIsDragging(false);
 
-    const files = Array.from(event.dataTransfer.files).filter((file) =>
-      file.type.startsWith("audio/")
+    const droppedFiles = Array.from(event.dataTransfer.files).filter(
+      (file) =>
+        file.type.startsWith("audio/") &&
+        !audioFiles.some((audio) => audio.name === file.name)
     );
 
-    const newAudioFiles: AudioFile[] = [];
+    if (!droppedFiles.length) {
+      return;
+    }
 
-    files.forEach((file) => {
-      const existingFile = audioFiles.some((audio) => audio.name === file.name);
-
-      if (!existingFile) {
-        const audio = new Audio(URL.createObjectURL(file));
-
-        audio.addEventListener("loadedmetadata", () => {
-          newAudioFiles.push({
-            name: file.name,
-            url: audio.src,
-            duration: audio.duration,
-          });
-
-          if (newAudioFiles.length === files.length) {
-            setAudioFiles((prev) => {
-              const updatedFiles = [...prev, ...newAudioFiles];
-
-              const firstAudioFile = newAudioFiles[0];
-              const firstAudioFileIndex = updatedFiles.indexOf(firstAudioFile);
-
-              setCurrentAudioIndex(firstAudioFileIndex);
-
-              return updatedFiles;
+    const newAudioFiles: AudioFile[] = await Promise.all(
+      droppedFiles.map(
+        (file) =>
+          new Promise<AudioFile>((resolve) => {
+            const audio = new Audio(URL.createObjectURL(file as Blob));
+            audio.addEventListener("loadedmetadata", () => {
+              resolve({
+                name: file.name,
+                path: audio.src,
+                duration: audio.duration,
+              });
             });
-          }
-        });
-      }
+          })
+      )
+    );
+
+    setAudioFiles((prev) => {
+      const updatedFiles = [...prev, ...newAudioFiles];
+
+      const firstAudioFile = newAudioFiles[0];
+      const firstAudioFileIndex = updatedFiles.indexOf(firstAudioFile);
+
+      setCurrentAudioIndex(firstAudioFileIndex);
+
+      return updatedFiles;
     });
   };
 

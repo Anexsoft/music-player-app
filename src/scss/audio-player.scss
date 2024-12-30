@@ -109,7 +109,7 @@
           transition: background 0.3s ease-in-out;
 
           &:hover {
-            background: --progress-bg;
+            background: var(--progress-bg);
           }
 
           &::-webkit-slider-thumb {
@@ -149,7 +149,7 @@
               color 0.3s ease-in-out;
 
             &:hover {
-              background-color: --secondary-color;
+              background-color: var(--secondary-color);
             }
 
             &.active {
@@ -177,7 +177,7 @@
                 color 0.3s ease-in-out;
 
               &:hover {
-                background-color: --secondary-color;
+                background-color: var(--secondary-color);
               }
 
               &.active {
@@ -205,7 +205,7 @@
               border-color 0.3s ease-in-out;
 
             &:hover {
-              background-color: --secondary-color;
+              background-color: var(--secondary-color);
               border-color: var(--primary-color);
             }
           }

@@ -256,9 +256,7 @@ const AppPlayer: React.FC = () => {
                 className="theme-selector"
                 onChange={(e) => setTheme(e.target.value)}
               >
-                <option selected value="dark">
-                  Dark
-                </option>
+                <option value="dark">Dark</option>
                 <option value="light">Light</option>
                 <option value="solaris">Solaris</option>
                 <option value="neon">Neon</option>
