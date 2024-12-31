@@ -1,4 +1,4 @@
-import { THEME_KEY } from "../../../common/keys";
+import { THEME_KEY } from "../../../shared/keys";
 
 interface ThemeChangeHandlerProps {
   value: string;

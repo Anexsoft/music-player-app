@@ -3,8 +3,8 @@ import { FaDeleteLeft } from "react-icons/fa6";
 
 import { useGlobalContext } from "../../Context";
 
-import { formatDuration } from "../../common/style";
-import { removeAudio } from "../../common";
+import { formatDuration } from "../../shared/style";
+import { removeAudio } from "../../shared/player";
 
 const AppPlayList: React.FC = () => {
   const { audioFiles, setAudioFiles, currentAudioIndex, setCurrentAudioIndex } =

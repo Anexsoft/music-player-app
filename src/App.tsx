@@ -6,7 +6,7 @@ import { AudioFile } from "./Context.types";
 import AppPlayList from "./components/AppPlayList/AppPlayList";
 import AppPlayer from "./components/AppPlayer/AppPlayer";
 
-import { playAudio } from "./common";
+import { playAudio } from "./shared/player";
 
 const App: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);

@@ -9,9 +9,9 @@ export const handleVolumeChangeHandler = ({
   currentAudioFile,
   setVolume,
 }: VolumeChangeHandlerProps) => {
-  setVolume((value / 100) * 100);
+  setVolume(value);
 
   if (currentAudioFile) {
-    currentAudioFile.volume = value;
+    currentAudioFile.volume = value / 100;
   }
 };

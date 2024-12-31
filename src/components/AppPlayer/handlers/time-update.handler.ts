@@ -1,4 +1,4 @@
-import { formatDuration } from "../../../common/style";
+import { formatDuration } from "../../../shared/style";
 
 interface TimeUpdateHandlerProps {
   currentAudioFile: HTMLAudioElement | null;

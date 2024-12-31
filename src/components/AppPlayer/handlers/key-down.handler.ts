@@ -1,4 +1,4 @@
-import { playAudio, stopAudio } from "../../../common";
+import { playAudio, stopAudio } from "../../../shared/player";
 
 interface KeyDownHandlerProps {
   currentAudioFile: HTMLAudioElement | null;

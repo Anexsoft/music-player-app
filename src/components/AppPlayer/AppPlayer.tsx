@@ -8,7 +8,7 @@ import {
   FaVolumeHigh,
 } from "react-icons/fa6";
 
-import { pauseAudio, playAudio, stopAudio } from "../../common";
+import { pauseAudio, playAudio, stopAudio } from "../../shared/player";
 import { useGlobalContext } from "../../Context";
 
 import { handleTimeUpdate } from "./handlers/time-update.handler";
@@ -19,7 +19,7 @@ import { handleMuteToggleHandler } from "./handlers/mute-toggle.handler";
 import { handleVolumeChangeHandler } from "./handlers/volume-change.handler";
 import { playbackRateChangeHandler } from "./handlers/playback-rate-change.handler";
 import { handleThemeChange } from "./handlers/theme-change.handler";
-import { THEME_KEY } from "../../common/keys";
+import { THEME_KEY } from "../../shared/keys";
 
 const AppPlayer: React.FC = () => {
   const {
