@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { setCurrentAudioIndex, useGlobalContext } from "./Context";
 import { AudioFile } from "./Context.types";
@@ -6,35 +6,42 @@ import { AudioFile } from "./Context.types";
 import AppPlayList from "./components/AppPlayList/AppPlayList";
 import AppPlayer from "./components/AppPlayer/AppPlayer";
 
-import { playAudio } from "./shared/player";
-
 const App: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
-  const { audioFiles, setAudioFiles, currentAudioIndex } = useGlobalContext();
+  const { audioFiles, setAudioFiles } = useGlobalContext();
 
-  useEffect(() => {
-    if (currentAudioIndex > -1) {
-      playAudio(true);
-    }
+  const updateTrackList = (newAudioFiles: AudioFile[]) => {
+    setAudioFiles((prev) => {
+      const updatedFiles = [...prev, ...newAudioFiles];
 
-    window.electron?.onFileOpened((path: string) => {
-      const audio = new Audio(path);
+      const firstAudioFile = newAudioFiles[0];
+      const firstAudioFileIndex = updatedFiles.indexOf(firstAudioFile);
 
-      audio.addEventListener("loadedmetadata", () => {
-        const newAudioFile: AudioFile = {
-          name: path.split("/").pop() || "Unknown",
-          path: audio.src,
-          duration: audio.duration,
-        };
+      setCurrentAudioIndex(firstAudioFileIndex);
 
-        setAudioFiles((prev) => {
-          const updatedFiles = [...prev, newAudioFile];
-          setCurrentAudioIndex(updatedFiles.indexOf(newAudioFile));
-          return updatedFiles;
-        });
-      });
+      return updatedFiles;
     });
-  }, [currentAudioIndex, setAudioFiles]);
+  };
+
+  window.electron?.onFileOpened(({ name, blob }) => {
+    const audio = new Audio(
+      URL.createObjectURL(
+        new Blob([Uint8Array.from(atob(blob), (char) => char.charCodeAt(0))], {
+          type: "audio/mpeg",
+        })
+      )
+    );
+
+    audio.addEventListener("loadedmetadata", () => {
+      const newAudioFile: AudioFile = {
+        name,
+        path: audio.src,
+        duration: audio.duration,
+      };
+
+      updateTrackList([newAudioFile]);
+    });
+  });
 
   const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -66,16 +73,7 @@ const App: React.FC = () => {
       )
     );
 
-    setAudioFiles((prev) => {
-      const updatedFiles = [...prev, ...newAudioFiles];
-
-      const firstAudioFile = newAudioFiles[0];
-      const firstAudioFileIndex = updatedFiles.indexOf(firstAudioFile);
-
-      setCurrentAudioIndex(firstAudioFileIndex);
-
-      return updatedFiles;
-    });
+    updateTrackList(newAudioFiles);
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {

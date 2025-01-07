@@ -7,12 +7,10 @@
   "homepage": ".",
   "main": "public/electron.js",
   "scripts": {
-    "eject": "react-scripts eject",
-    "start": "react-scripts start",
-    "electron": "npm run tef-electron && concurrently \"BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
-    "build": "npm run tef-electron && react-scripts build && electron-builder",
-    "test": "react-scripts test",
-    "tef-electron": "npx tsc electron.ts --outDir public"
+    "tef-electron": "npx tsc src-electron/electron.ts src-electron/preload.ts --outDir public",
+    "start": "npm run tef-electron && concurrently \"BROWSER=none npm run start:react\" \"wait-on http://localhost:3000 && electron .\"",
+    "start:react": "react-scripts start",
+    "build": "npm run tef-electron && react-scripts build && electron-builder"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
